@@ -20,7 +20,7 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     private int m_Points;
-    private int highScore = 0;
+    public int highScore;
     
     private bool m_GameOver = false;
 
@@ -66,6 +66,8 @@ public class MainManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
+
+        UpdateHighScore();
     }
 
     void AddPoint(int point)
@@ -74,19 +76,25 @@ public class MainManager : MonoBehaviour
         ScoreText.text = $"Score : {m_Points}";
     }
 
+    // ハイスコア更新
     void UpdateHighScore()
     {
-        // add myself
         if (m_Points > highScore)
         {
             highScore = m_Points;
-            highScoreText.text = $"BestScore : {InputManager.Instace.nameText} : {highScore}";
         }
+
+        if (highScore > InputManager.Instace.highScore)
+        {
+            InputManager.Instace.highScore = highScore;
+        }
+
+        highScoreText.text = $"BestScore : {InputManager.Instace.nameText} : {InputManager.Instace.highScore}";
     }
 
     public void GameOver()
     {
-        UpdateHighScore();
+        InputManager.Instace.SavePlayer();
         m_GameOver = true;
         GameOverText.SetActive(true);
     }

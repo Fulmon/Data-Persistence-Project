@@ -8,9 +8,18 @@ using UnityEngine.UI;
 using UnityEditor;
 #endif 
 
+[DefaultExecutionOrder(1000)]
 public class MenuManagement : MonoBehaviour
 {
     [SerializeField] InputField nameText;
+
+    private void Awake()
+    {
+        if (InputManager.Instace.nameText != "")
+        {
+            nameText.text = InputManager.Instace.nameText;
+        }
+    }
 
     public void NewGame()
     {
@@ -21,6 +30,7 @@ public class MenuManagement : MonoBehaviour
         else
         {
             InputManager.Instace.nameText = nameText.text;
+            InputManager.Instace.SavePlayer();
             SceneManager.LoadScene(1);
         }
     }
