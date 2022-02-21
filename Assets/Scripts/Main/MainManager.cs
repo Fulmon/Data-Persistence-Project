@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class MainManager : MonoBehaviour
 {
     public Brick BrickPrefab;
@@ -11,10 +15,12 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text highScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
     private int m_Points;
+    private int highScore = 0;
     
     private bool m_GameOver = false;
 
@@ -68,9 +74,31 @@ public class MainManager : MonoBehaviour
         ScoreText.text = $"Score : {m_Points}";
     }
 
+    void UpdateHighScore()
+    {
+        // add myself
+        if (m_Points > highScore)
+        {
+            highScore = m_Points;
+            highScoreText.text = $"BestScore : {InputManager.Instace.nameText} : {highScore}";
+        }
+    }
+
     public void GameOver()
     {
+        UpdateHighScore();
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+#if UNITY_EDITOR
+    // テスト用にInputManagerをMainシーンに生成しようとしました。
+    private void Awake()
+    {
+        if (InputManager.Instace == null)
+        {
+
+        }
+    }
+#endif
 }
